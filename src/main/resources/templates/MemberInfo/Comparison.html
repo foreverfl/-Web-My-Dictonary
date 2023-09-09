@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!-- my dictionary CSS -->
+<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+<!-- font setting -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Jua&family=The+Nautigal:wght@700&display=swap"
+	rel="stylesheet">
+<title>My Dictionary: 프리미엄 안내</title>
+</head>
+
+<body>
+	<div class="container-fluid p-0"
+		th:insert="~{/fragment/navbar :: navbar}"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"></div>
+		<div
+			class="col-11 d-flex flex-column justify-content-center align-items-center"
+			id="main">
+			<div>
+				<table class="table text-center">
+					<thead>
+						<tr>
+							<th scope="col" width="150"></th>
+							<th scope="col" width="300">일반</th>
+							<th scope="col" width="300">프리미엄</th>
+						<tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="fw-bold" scope="col">광고 여부</td>
+							<td scope="col">o</td>
+							<td scope="col">x</td>
+						<tr>
+						<tr>
+							<td class="fw-bold" scope="col">단어장 개수</td>
+							<td scope="col">1개</td>
+							<td scope="col">5개</td>
+						<tr>
+						<tr>
+							<td class="fw-bold" scope="col">단어 개수</td>
+							<td scope="col">500개</td>
+							<td scope="col">무제한</td>
+						<tr>
+						<tr>
+							<td class="fw-bold" scope="col">공개 여부</td>
+							<td scope="col">공개</td>
+							<td scope="col">선택 가능</td>
+						<tr>
+						<tr>
+							<td class="fw-bold" scope="col">가격</td>
+							<td scope="col">무료</td>
+							<td scope="col">월 3,999원</td>
+						<tr>
+						<tr class="">
+							<td class="p-3 fs-3" colspan='3'
+								style="font-family: 'Jua', sans-serif;">프리미엄 회원으로 등록하시겠습니까?<br>
+								<button class="m-2 btn btn-lg btn-outline-primary" type="submit"
+									id="iamportPayment">프리미엄 등록</button>
+							</td>
+						<tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div>
+				<p>* 프리미엄 회원에게는 차후에 추가될 컨텐츠에도 할인이 적용됩니다.</p>
+			</div>
+		</div>
+	</div>
+
+	<form th:action="@{/comparison}" method="post">
+		<div>
+			<input id="card_number" name="card_number" type="hidden">
+		</div>
+		<div>
+			<input id="expiry" name="expiry" type="hidden">
+		</div>
+		<div>
+			<input id="birth" name="birth" type="hidden">
+		</div>
+		<div>
+			<input id="pwd_2digit" name="pwd_2digit" type="hidden">
+		</div>
+		<input value="gildong_0001_1234" name="customer_uid" type="hidden">
+		<input value="결제하기" type="hidden">
+	</form>
+
+	<!-- modal -->
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+<script type="text/javascript" th:src="@{/js/autoLoading.js}"></script>
+<!-- iamport.payment.js -->
+<script type="text/javascript"
+	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script>
+	//문서가 준비되면 제일 먼저 실행
+	$(document).ready(function() {
+		$("#iamportPayment").click(function() {
+			iamportPayment();
+		});
+	})
+	//버튼 클릭하면 실행
+	function iamportPayment() {
+		IMP.init("imp36445814"); // identifying code
+
+		IMP.request_pay({
+			pg : 'kcp_billing',
+			pay_method : 'card', // 'card' is only possible
+			merchant_uid : 'merchant_' + new Date(),
+			name : '최초인증결제',
+			amount : 1, // 결제창에 표시될 금액. 실제 승인이 이뤄지지는 않습니다. (PC에서는 가격이 표시되지 않음)
+			customer_uid : 'customer_' + new Date(),
+			buyer_email : 'iamport@siot.do',
+			buyer_name : '아임포트',
+			buyer_tel : '02-1234-1234',
+			m_redirect_url : 'http://localhost:8080/navbar/comparison'
+		}, function(response) {
+			if (response.success) {
+				alert('빌링키 발급 성공');
+
+				jQuery.ajax({
+					url : "http://localhost:8080/comparison",
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/json"
+					},
+					data : {
+						imp_uid : response.imp_uid,
+						merchant_uid : response.merchant_uid
+					}
+
+				}).done(function(data) {
+					// 가맹점 서버 결제 API 성공시 로직
+				})
+
+			} else {
+				alert('빌링키 발급 실패');
+			}
+		});
+	}
+</script>
+
+</html>

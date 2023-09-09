@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- my dictionary CSS -->
+<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+<!-- font setting -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Jua&family=The+Nautigal:wght@700&display=swap"
+	rel="stylesheet">
+<title>My Dictionary: 단어장 설정</title>
+</head>
+
+<body>
+	<div class="container-fluid p-0"
+		th:insert="~{/fragment/navbar :: navbar}" id="navbar"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"
+			id="sidebar"></div>
+		<div class="col-11" id="main">
+			<div class="container h-100">
+				<div class="row h-100 justify-content-center">
+					<form class="align-self-center border rounded col-6"
+						th:action="@{/dictionary/{id}/{dicId}/config(id=${dictionary.writer}, dicId=${dictionary.idAuto})}"
+						th:method="POST" th:object="${dictionary}" id="dicForm">
+
+						<div class="row justify-content-center">
+							<div class="col-8">
+								<br>
+								<!-- language -->
+								<select class="form-control text-center" th:field="*{lan}"
+									id="lan" disabled>
+									<th:block
+										th:each="lanVal : ${T(com.example.My.Dictonary.Entities.Enum.Lan).values()}">
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('ENG')}" id="lanEn">영어</option>
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('JAP')}" id="lanJa">일본어</option>
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('KOR')}" id="lanKo">한국어</option>
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('SPA')}" id="lanSp">스페인어</option>
+									</th:block>
+								</select><br>
+
+								<!-- dictionary -->
+								<input class="form-control text-center" th:field="*{dic}"
+									id="selectDic" disabled><br>
+
+								<!-- name -->
+								<input class="form-control" type="text" th:field="*{name}"
+									placeholder="단어장 이름" id="name"><br>
+
+								<div class="row justify-content-around">
+									<!-- maximum meaning -->
+									<div class="col-5">
+										<select class="form-control text-center" type="text"
+											th:field="*{maxMeaning}">
+											<option th:value="0">의미 개수</option>
+											<option th:value="1" th:text="1"></option>
+											<option th:value="2" th:text="2"></option>
+											<option th:value="3" th:text="3"></option>
+											<option th:value="4" th:text="4"></option>
+											<option th:value="5" th:text="5"></option>
+										</select>
+									</div>
+
+									<!-- maximum test -->
+									<div class="col-5">
+										<select class="form-control text-center" type="text"
+											th:field="*{maxTest}">
+											<option th:value="0">테스트 횟수</option>
+											<option th:value="1" th:text="1"></option>
+											<option th:value="2" th:text="2"></option>
+											<option th:value="3" th:text="3"></option>
+											<option th:value="4" th:text="4"></option>
+											<option th:value="5" th:text="5"></option>
+										</select>
+									</div>
+								</div>
+								<br>
+
+								<!-- is public -->
+								<div class="row justify-content-around gx-1 p-3 border rounded"
+									th:field="*{isPublic}">
+									<!-- public -->
+									<div class="col-3">
+										<label for="public">공개</label> <input type="radio"
+											name="isPublic" value="true" th:value="true" id="public">
+									</div>
+
+									<!-- not public -->
+									<div class="col-3">
+										<label for="notPublic">비공개</label> <input type="radio"
+											name="isPublic" value="false" th:value="false" id="woman">
+									</div>
+								</div>
+								<div class="form-text">* 무료 회원은 비공개가 불가능합니다.</div>
+								<br>
+
+								<!-- description -->
+								<textarea class="form-control" rows="5" cols="25"
+									name="description" th:field="*{description}"
+									placeholder="단어장 설명을 입력해주세요."></textarea>
+								<br>
+
+								<!-- sign up button -->
+								<div class="row justify-content-around">
+									<button class="col-4 btn btn-danger btn-lg" type="button"
+										th:onclick="'location.href=\'' + @{/dictionary/{id}/{dicId}/delete(id=${session.session_id}, dicId=${session.session_dic_id})} + '\''">단어장
+										삭제</button>
+									<input class="col-4 btn btn-outline-primary btn-lg"
+										type="submit" value="설정 변경">
+								</div>
+								<br>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal -->
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+
+</html>

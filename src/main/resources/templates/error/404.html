@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Test Error Page!</title>
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+</head>
+<body>
+	<div class="container h-100">
+		<div class="row h-100 justify-content-center align-items-center">
+			<div class="col-12">
+				<p class="text-center fs-1 fw-bold">페이지가 존재하지 않습니다.</p>
+				<p class="text-center">
+					<img class="rounded" th:src="@{/images/error.gif}">
+				</p>
+
+				<p th:text="${'path: ' + path}"></p>
+				<p th:text="${'status: ' + status}"></p>
+				<p th:text="${'timestamp: ' + timestamp}"></p>
+				<p th:text="${'error: ' + error}"></p>
+				<p th:text="${'errors: ' + errors}"></p>
+				<p th:text="${'exception: ' + exception}"></p>
+				<p th:text="${'message: ' + message}"></p>
+				<p th:text="${'trace: ' + trace}"></p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

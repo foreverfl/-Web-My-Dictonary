@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<style>
+		#title {
+			font-family: 'Do Hyeon', sans-serif;
+		}
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>My Dictionary - 로그인</title>
+	<!-- Bootstrap CSS -->
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+	<!-- font: Do Hyeon -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<div class="container h-100">
+		<div class="row h-100 justify-content-center">
+			<form class="col-8 align-self-center border rounded m-5" th:action="@{/sign_up}" th:method="POST"
+				th:object="${memberDTO}">
+
+				<br>
+				<h2 class="text-center" id="title">회원가입</h2>
+				<br>
+				<div class="row justify-content-center">
+					<div class="col-9">
+						<!-- ID -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">아이디</span><span class="text-danger fw-bold">*</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" th:field="*{id}"
+											placeholder="아이디를 입력해주세요." id="id" autocomplete="username">
+										<div class="row text-danger mx-1 mt-1" id="id_check" style="font-size:12px">
+										</div>
+									</div>
+									<div class="col-2">
+										<input class="btn btn-outline-secondary" type="button" value="중복확인"
+											data-bs-toggle="modal" data-bs-target="#modal" id="btn_id">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- password -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">비밀번호</span><span class="text-danger fw-bold">*</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="password" th:field="*{pw}"
+											placeholder="비밀번호를 입력해주세요." id="pw" autocomplete="new-password">
+										<div class="row text-danger mx-1 mt-1" id="pw_check" style="font-size:12px">
+										</div>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- password-repeated -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">비밀번호확인</span><span class="text-danger fw-bold">*</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="password" placeholder="비밀번호를 한 번 더 입력해주세요."
+											id="pw_repeated" autocomplete="new-password">
+										<div class="row text-danger mx-1 mt-1" id="pw_repeated_check"
+											style="font-size:12px"></div>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<!--name -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">이름</span><span class="text-danger fw-bold">*</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" placeholder="이름을 입력해주세요." id="name">
+										<div class="row text-danger mx-1 mt-1" id="name_check" style="font-size:12px">
+										</div>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!--nickname -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">닉네임</span><span class="text-danger fw-bold">*</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" th:field="*{nickname}"
+											placeholder="닉네임을 입력해주세요." id="nickname">
+										<div class="row text-danger mx-1 mt-1" id="nickname_check"
+											style="font-size:12px">
+										</div>
+									</div>
+									<div class="col-2">
+										<input class="btn btn-outline-secondary" type="button" value="중복확인"
+											data-bs-toggle="modal" data-bs-target="#modal" id="btn_nickname">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!--email -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">이메일</span><span class="text-danger fw-bold">*</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" th:field="*{email}"
+											placeholder="이메일을 입력해주세요." id="email">
+										<div class="row text-danger mx-1 mt-1" id="email_check" style="font-size:12px">
+										</div>
+									</div>
+									<div class="col-2">
+										<input class="btn btn-outline-secondary" type="button" value="중복확인"
+											data-bs-toggle="modal" data-bs-target="#modal" id="btn_email">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- cell phone -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">휴대폰</span><span class="text-danger fw-bold">*</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" placeholder="숫자만 입력해주세요."
+											id="phone_number">
+										<div class="row text-danger mx-1 mt-1" id="phone_number_check"
+											style="font-size:12px">
+										</div>
+									</div>
+									<div class="col-2">
+										<input class="btn btn-outline-secondary" type="button" value="인증하기"
+											id="btn_phone_number">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- address -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">주소</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end mb-3 gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" placeholder="주소를 입력해주세요." id="address_1"
+											readonly>
+									</div>
+									<div class="col-2">
+										<input class="btn btn-outline-secondary" type="button" value="주소검색"
+											id="btn_address">
+									</div>
+								</div>
+
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" placeholder="상세주소를 입력해주세요."
+											id="address_2">
+										<input class="form-control" type="text" id="address_postcode"
+											style="display:none;">
+										<input class="form-control" type="text" id="address_extra"
+											style="display:none;">
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- sex -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">성별</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<fieldset>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" value="man" name="sex">
+												<label class="form-check-label" for="man">남자</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" value="woman" name="sex">
+												<label class="form-check-label" for="woman">여자</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" value="human" name="sex">
+												<label class="form-check-label" for="human">선택안함</label>
+											</div>
+										</fieldset>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- birthday -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">생년월일</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" placeholder="생년월일을 입력해주세요." id="birth">
+										<div class="row text-danger mx-1 mt-1" id="birth_check" style="font-size:12px">
+										</div>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- recommendation -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">추천인</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<input class="form-control" type="text" placeholder="추천인을 입력해주세요."
+											id="recommendation">
+										<div class="row text-danger mx-1 mt-1" id="recommendation_check"
+											style="font-size:12px"></div>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<hr class="my-5">
+
+						<!-- agreement -->
+						<div class="d-flex flex-row justify-content-center mb-3">
+							<div class="col-2 d-flex align-items-center">
+								<span class="fw-bold">이용약관 동의</span>
+							</div>
+							<div class="col">
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="agreeing_all">
+											<label class="form-check-label fw-bold" for="agreeing_all">전체
+												동의합니다.</label>
+										</div>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="terms_personal_info">
+											<label class="form-check-label" for="terms_personal_info">개인정보 수집/이용
+												동의 <span class="text-secondary fw-bold">(필수)</span></label>
+										</div>
+									</div>
+									<div class="col-2 fw-bold" data-bs-toggle="modal" data-bs-target="#modal_terms"
+										id="btn_terms_personal_info">
+										약관보기 >
+									</div>
+								</div>
+
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="terms_using_site">
+											<label class="form-check-label" for="terms_using_site">이용약관 동의 <span
+													class="text-secondary fw-bold">(필수)</span></label>
+										</div>
+									</div>
+									<div class="col-2 fw-bold" data-bs-toggle="modal" data-bs-target="#modal_terms"
+										id="btn_terms_using_site">
+										약관보기 >
+									</div>
+								</div>
+
+								<div class="row justify-content-end gx-2">
+									<div class="col-9">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox"
+												value="terms_optional_service">
+											<label class="form-check-label" for="terms_optional_service">SMS
+												혜택/정보
+												수신 동의
+												<span class="text-secondary fw-bold">(선택)</span></label>
+										</div>
+									</div>
+									<div class="col-2">
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- sign up button -->
+						<div class="row justify-content-center my-5">
+							<input class="col-4 btn btn-lg btn-outline-primary" type="submit" value="가입하기">
+						</div>
+						<br>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- modal -->
+	<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body m-1">
+					<div class="mb-3" id="modal_text">잠시만 기다려주세요.</div>
+					<div class="text-end">
+						<button type="button" class="btn btn-link text-decoration-none link-dark"
+							data-bs-dismiss="modal" id="btn_modal">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal for terms-->
+	<div class="modal fade" id="modal_terms" tabindex="-1" aria-labelledby="modal_terms" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-body p-0">
+					<div class="mb-3" id="modal_terms_text"></div>
+					<div class="d-grid gap-2">
+						<button type="button" class="btn btn-lg btn-outline-primary" data-bs-dismiss="modal"
+							id="btn_modal_terms">확인</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="/js/bootstrap.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<script>
+
+	idCheckFunc();
+	function idCheckFunc() {
+		const id = document.querySelector('#id');
+		let idCheck = document.querySelector('#id_check');
+		const regExp_id = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+		id.addEventListener('focus', function () {
+			if (!regExp_id.test(id.value)) {
+				idCheck.innerHTML = '8자 이상, 영문자/숫자를 각각 하나 이상 포함';
+			} else {
+				idCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		id.addEventListener('input', function () {
+			if (!regExp_id.test(id.value)) {
+				idCheck.innerHTML = '8자 이상, 영문자/숫자를 각각 하나 이상 포함';
+			} else {
+				idCheck.innerHTML = '';
+			}
+		});
+
+		const btnId = document.querySelector('#btn_id');
+		const modalText = document.querySelector('#modal_text');
+
+		btnId.addEventListener('click', function () {
+
+			if (regExp_id.test(id.value)) {
+
+				const url_idCheck = 'http://localhost:8080/sign_up/id_check';
+				const data = new Object();
+				data.id = id.value;
+
+				fetch(url_idCheck, {
+					method: 'post',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data)
+				})
+					.then(response => response.text())
+					.then(text => {
+						if (text === 'possible') {
+
+							modalText.innerHTML = '<strong>사용 가능한 아이디입니다.</strong>'
+							btnId.classList.replace('btn-outline-secondary', 'btn-secondary');
+							id.setAttribute('disabled', 'true');
+							btnId.setAttribute('disabled', 'true');
+
+						} else if (text === 'impossible') {
+
+							modalText.innerHTML = '<strong>사용 중인 아이디입니다.</strong>'
+
+						}
+					})
+					.catch(error => console.log(error));
+
+			} else {
+
+				modalText.innerHTML = '<strong>사용 불가능한 아이디입니다.</strong>'
+
+			}
+
+		});
+	}
+
+	pwCheckFunc();
+	function pwCheckFunc() {
+		const pw = document.querySelector('#pw');
+		let pwCheck = document.querySelector('#pw_check');
+		const regExp_pw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+		pw.addEventListener('focus', function () {
+			if (!regExp_pw.test(pw.value)) {
+				pwCheck.innerHTML = '8자 이상, 영문자/숫자/특수문자를 각각 하나 이상 포함';
+			} else {
+				pwCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		pw.addEventListener('input', function () {
+			if (!regExp_pw.test(pw.value)) {
+				pwCheck.innerHTML = '8자 이상, 영문자/숫자/특수문자를 각각 하나 이상 포함';
+			} else {
+				pwCheck.innerHTML = '';
+			}
+		});
+	}
+
+	pwRepeatedCheckFunc();
+	function pwRepeatedCheckFunc() {
+		const pw = document.querySelector('#pw');
+		const pwRepeated = document.querySelector('#pw_repeated');
+		let pwRepeatedCheck = document.querySelector('#pw_repeated_check');
+
+		pwRepeated.addEventListener('focus', function () {
+			if (pw.value !== pwRepeated.value) {
+				pwRepeatedCheck.innerHTML = '동일한 비밀번호 입력';
+			} else {
+				pwRepeatedCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		pwRepeated.addEventListener('input', function () {
+			if (pw.value !== pwRepeated.value) {
+				pwRepeatedCheck.innerHTML = '동일한 비밀번호 입력';
+			} else {
+				pwRepeatedCheck.innerHTML = '';
+			}
+		});
+	}
+
+	nameCheckFunc();
+	function nameCheckFunc() {
+		const name = document.querySelector('#name');
+		let nameCheck = document.querySelector('#name_check');
+
+		name.addEventListener('focus', function () {
+			if (name.value === '') {
+				nameCheck.innerHTML = '이름 입력';
+			} else {
+				nameCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		name.addEventListener('input', function () {
+			if (name.value === '') {
+				nameCheck.innerHTML = '이름 입력';
+			} else {
+				nameCheck.innerHTML = '';
+			}
+		});
+	}
+
+	nicknameCheckFunc();
+	function nicknameCheckFunc() {
+		const nickname = document.querySelector('#nickname');
+		let nicknameCheck = document.querySelector('#nickname_check');
+
+		nickname.addEventListener('focus', function () {
+			if (nickname.value === '') {
+				nicknameCheck.innerHTML = '닉네임 입력';
+			} else {
+				nicknameCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		nickname.addEventListener('input', function () {
+			if (nickname.value === '') {
+				nicknameCheck.innerHTML = '닉네임 입력';
+			} else {
+				nicknameCheck.innerHTML = '';
+			}
+		});
+
+		const btnNickname = document.querySelector('#btn_nickname');
+		const modalText = document.querySelector('#modal_text');
+
+		btnNickname.addEventListener('click', function () {
+
+			const url_nicknameCheck = 'http://localhost:8080/sign_up/nickname_check';
+			const data = new Object();
+			data.nickname = nickname.value;
+
+			fetch(url_nicknameCheck, {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data)
+			})
+				.then(response => response.text())
+				.then(text => {
+					if (text === 'possible') {
+
+						modalText.innerHTML = '<strong>사용 가능한 닉네임입니다.</strong>'
+						btnNickname.classList.replace('btn-outline-secondary', 'btn-secondary');
+						nickname.setAttribute('disabled', 'true');
+						btnNickname.setAttribute('disabled', 'true');
+
+					} else if (text === 'impossible') {
+
+						modalText.innerHTML = '<strong>사용 중인 닉네임입니다.</strong>'
+
+					}
+				})
+				.catch(error => console.log(error));
+		});
+	}
+
+	emailCheckFunc();
+	function emailCheckFunc() {
+		const email = document.querySelector('#email');
+		let emailCheck = document.querySelector('#email_check');
+		const regExp_email = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+		email.addEventListener('focus', function () {
+			if (!regExp_email.test(email.value)) {
+				emailCheck.innerHTML = '예시: mydictionary@mydictionary.com';
+			} else {
+				emailCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		email.addEventListener('input', function () {
+			if (!regExp_email.test(email.value)) {
+				emailCheck.innerHTML = '예시: mydictionary@mydictionary.com';
+			} else {
+				emailCheck.innerHTML = '';
+			}
+		});
+
+		const btnEmail = document.querySelector('#btn_email');
+		const modalText = document.querySelector('#modal_text');
+
+		btnEmail.addEventListener('click', function () {
+
+			const url_emailCheck = 'http://localhost:8080/sign_up/email_check';
+			const data = new Object();
+			data.email = email.value;
+
+			fetch(url_emailCheck, {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data)
+			})
+				.then(response => response.text())
+				.then(text => {
+					if (text === 'possible') {
+
+						modalText.innerHTML = '<div class="fw-bold">사용 가능한 이메일입니다.</div>'
+							+ '<div class="fw-bold mb-2">발송한 인증번호를 입력해주세요.</div>'
+							+ '<div class="fw-bold mb-2">남은 시간: <span class="text-danger" id="remaining_time"></span></div>'
+							+ '<input class="form-control" type="text" id="auth_code">';
+
+						const display = document.querySelector('#remaining_time');
+						countDownTimer(300, display);
+
+						const btnModal = document.querySelector('#btn_modal');
+
+						btnModal.addEventListener('click', function () {
+
+							const authCode = document.querySelector('#auth_code');
+
+							const url_checkEmailCode = 'http://localhost:8080/sign_up/email_code_check';
+
+							let data = new Object();
+							data.email_code = authCode.value;
+
+							fetch(url_checkEmailCode, {
+								method: 'post',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify(data)
+							})
+								.then(response => response.text())
+								.then(text => {
+									if (text === 'valid') {
+										alert('인증되었습니다.\n\n'
+											+ '회원가입을 진행해주세요.');
+
+										email.setAttribute('disabled', 'true');
+										btnEmail.classList.replace('btn-outline-secondary', 'btn-secondary');
+										btnEmail.setAttribute('disabled', 'true')
+									} else {
+										alert('인증에 실패하였습니다.');
+									}
+
+								})
+								.catch(error => console.log(error));
+
+						})
+
+					} else if (text === 'impossible') {
+
+						modalText.innerHTML = '<div class="fs-bold">사용 중인 이메일입니다.</div>'
+
+					}
+				})
+				.catch(error => console.log(error));
+		});
+	}
+
+	function countDownTimer(duration, display) {
+
+		let timer = duration, minutes, seconds;
+
+		let countdown = setInterval(function () {
+			minutes = parseInt(timer / 60, 10);
+			seconds = parseInt(timer % 60, 10);
+
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+
+			display.textContent = minutes + ':' + seconds;
+
+			if (timer-- === 0) {
+				clearInterval(countdown);
+			}
+		}, 1000);
+	}
+
+	// This function input directly because of not working.
+	function checkEmailCode(code) {
+
+		const url_checkEmailCode = 'http://localhost:8080/sign_up/email_code_check';
+
+		let data = new Object();
+		data.email_code = code;
+
+		fetch(url_checkEmailCode, {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+			.then(response => response.text())
+			.then(text => {
+				console.log(text);
+
+			})
+			.catch(error => console.log(error));
+
+	}
+
+	checkPhoneNumberFunc();
+	function checkPhoneNumberFunc() {
+
+		const phoneNumber = document.querySelector('#phone_number');
+		let phoneNumberCheck = document.querySelector('#phone_number_check');
+
+		phoneNumber.addEventListener('focus', function () {
+			if (phoneNumber.value === '') {
+				phoneNumberCheck.innerHTML = '예시: 01012345678';
+			} else {
+				phoneNumberCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		phoneNumber.addEventListener('input', function () {
+			if (phoneNumber.value === '') {
+				phoneNumberCheck.innerHTML = '예시: 01012345678';
+			} else {
+				phoneNumberCheck.innerHTML = '';
+			}
+		});
+
+		// set endpoint and your access key
+		const serviceId = 'ncp:sms:kr:292463697389:my_dictionary';
+		const now = new Date();
+		const timeStamp = now.getTime().toString();
+		const accessKey = 'ncp:sms:kr:292463697389:my_dictionary';
+		const secretKey = '5cae17c8a239434f96e69dbdf70a4bb2';
+
+		const btnPhoneNumber = document.querySelector('#btn_phone_number');
+
+		btnPhoneNumber.addEventListener('click', function () {
+
+			const tmp = makeSignature();
+			console.log(tmp);
+
+			const body = new Object();
+			body.type = 'SMS';
+			body.from = '01071906905';
+			body.content = '[My Dictionary] 인증번호 [123456]를 입력해주세요.';
+			body.messages.to = '01042266905'
+
+
+
+			// const url_checkPhoneNumber = 'https://sens.apigw.ntruss.com/sms/v2/services/' + serviceId + '/messages';
+			// fetch(url_checkPhoneNumber, {
+			// 	method: 'post',
+			// 	headers: {
+			// 		'Content-Type': 'application/json',
+			// 		'x-ncp-apigw-timestamp': timeStamp,
+			// 		'x-ncp-iam-access-key': accessKey,
+			// 		'x-ncp-apigw-signature-v2': signature
+			// 	},
+			// 	body: JSON.stringify(body)
+			// })
+		});
+	}
+
+	function makeSignature() {
+		var space = " ";
+		var newLine = "\n";
+		var method = "GET";
+		var url = "/photos/puppy.jpg?query1=&query2";
+		const now = new Date();
+		var timestamp = now.getTime().toString();
+		var accessKey = 'ncp:sms:kr:292463697389:my_dictionary';
+		var secretKey = '5cae17c8a239434f96e69dbdf70a4bb2';
+
+		var hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
+		hmac.update(method);
+		hmac.update(space);
+		hmac.update(url);
+		hmac.update(newLine);
+		hmac.update(timestamp);
+		hmac.update(newLine);
+		hmac.update(accessKey);
+
+		var hash = hmac.finalize();
+
+		return hash.toString(CryptoJS.enc.Base64);
+	}
+
+	checkAddressFunc();
+	function checkAddressFunc() {
+
+		const btnAddress = document.querySelector('#btn_address');
+		let address1 = document.querySelector('#address_1');
+		let address2 = document.querySelector('#address_2');
+
+		btnAddress.addEventListener('click', function () {
+			new daum.Postcode({
+				oncomplete: function (data) {
+
+					let addr = '';
+					let extraAddr = '';
+
+					// selecting address type
+					// road address
+					if (data.userSelectedType === 'R') {
+						addr = data.roadAddress;
+					}
+
+					// jibun address(J)
+					else {
+						addr = data.jibunAddress;
+					}
+
+					// when address type is a road address
+					if (data.userSelectedType === 'R') {
+						if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+							extraAddr += data.bname;
+						}
+
+						if (data.buildingName !== '' && data.apartment === 'Y') {
+							extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+						}
+
+						if (extraAddr !== '') {
+							extraAddr = ' (' + extraAddr + ')';
+						}
+
+						document.querySelector("#address_extra").value = extraAddr;
+
+					} else {
+
+						document.querySelector("#address_extra").value = '';
+
+					}
+
+					// inputting information
+					document.querySelector('#address_postcode').value = data.zonecode;
+					address1.value = addr;
+					address2.focus();
+
+					// disabling
+					btnAddress.classList.replace('btn-outline-secondary', 'btn-secondary');
+					address1.setAttribute('disabled', 'true');
+					btnAddress.setAttribute('disabled', 'true');
+
+				}
+			}).open();
+		})
+
+	}
+
+	birthCheckFunc();
+	function birthCheckFunc() {
+		const birth = document.querySelector('#birth');
+		let birthCheck = document.querySelector('#birth_check');
+
+		birth.addEventListener('focus', function () {
+			if (birth.value === '') {
+				birthCheck.innerHTML = '예시: 000101';
+			} else {
+				birthCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		birth.addEventListener('input', function () {
+			if (birth.value === '') {
+				birthCheck.innerHTML = '예시: 000101';
+			} else {
+				birthCheck.innerHTML = '';
+			}
+		});
+	}
+
+	recommendationCheckFunc();
+	function recommendationCheckFunc() {
+		const recommendation = document.querySelector('#recommendation');
+		let recommendationCheck = document.querySelector('#recommendation_check');
+
+		recommendation.addEventListener('focus', function () {
+			if (recommendation.value === '') {
+				recommendationCheck.innerHTML = '추천인 입력';
+			} else {
+				recommendationCheck.innerHTML = '';
+			}
+		}, { once: true });
+
+		recommendation.addEventListener('input', function () {
+			if (recommendation.value === '') {
+				recommendationCheck.innerHTML = '추천인 입력';
+			} else {
+				recommendationCheck.innerHTML = '';
+			}
+		});
+	}
+
+	clickTerms();
+	function clickTerms() {
+		const btnTermsPersonalInfo = document.querySelector('#btn_terms_personal_info');
+		const modalText = document.querySelector('#modal_terms_text');
+
+		btnTermsPersonalInfo.addEventListener('mouseover', function () {
+
+			btnTermsPersonalInfo.style.cursor = 'pointer';
+
+		});
+
+		btnTermsPersonalInfo.addEventListener('click', function () {
+
+			modalText.innerHTML = '<iframe src="http://localhost:8080/terms_personal_information" style="width: 100%; height: 750px"></iframe>';
+
+		});
+	}
+
+</script>
+
+</html>

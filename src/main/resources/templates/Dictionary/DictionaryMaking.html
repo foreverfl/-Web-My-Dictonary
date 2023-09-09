@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!-- my dictionary CSS -->
+<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+<title>My Dictionary: 단어장 만들기</title>
+</head>
+
+<body>
+	<div class="container-fluid p-0"
+		th:insert="~{/fragment/navbar :: navbar}"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"></div>
+		<div class="col-11" id="main">
+			<div class="container h-100">
+				<div class="row h-100 justify-content-center ">
+					<form class="align-self-center border rounded col-6"
+						th:action="@{/dictionaryMaking}" th:method="POST"
+						th:object="${dictionary}" id="dicForm">
+
+						<div class="row justify-content-center">
+							<div class="col-8">
+								<br>
+
+								<!-- language -->
+								<select class="form-control text-center" th:selected="*{lan}"
+									name="lan" id="lan">
+									<th:block
+										th:each="lanVal : ${T(com.example.My.Dictonary.Entities.Enum.Lan).values()}">
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('ENG')}" id="lanEn">영어</option>
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('JAP')}" id="lanJa">일본어</option>
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('KOR')}" id="lanKo">한국어</option>
+										<option th:value="${lanVal.name()}"
+											th:if="${lanVal.name().equals('SPA')}" id="lanSp">스페인어</option>
+									</th:block>
+								</select><br>
+
+								<!-- dictionary -->
+								<select class="form-control text-center" name="dic"
+									id="selectDic">
+								</select> <br>
+
+								<!-- name -->
+								<input class="form-control" type="text" th:field="*{name}"
+									placeholder="단어장 이름" id="name"><br>
+								<div class="row justify-content-around">
+									<!-- maximum meaning -->
+									<div class="col-5">
+										<select class="form-control text-center" type="text"
+											th:field="*{maxMeaning}">
+											<option th:value="0">의미 개수</option>
+											<option th:value="1" th:text="1"></option>
+											<option th:value="2" th:text="2"></option>
+											<option th:value="3" th:text="3"></option>
+											<option th:value="4" th:text="4"></option>
+											<option th:value="5" th:text="5"></option>
+										</select>
+									</div>
+
+									<!-- maximum test -->
+									<div class="col-5">
+										<select class="form-control text-center" type="text"
+											th:field="*{maxTest}">
+											<option th:value="0">테스트 횟수</option>
+											<option th:value="1" th:text="1"></option>
+											<option th:value="2" th:text="2"></option>
+											<option th:value="3" th:text="3"></option>
+											<option th:value="4" th:text="4"></option>
+											<option th:value="5" th:text="5"></option>
+										</select>
+									</div>
+								</div>
+								<br>
+
+								<!-- is public -->
+								<div class="row justify-content-around gx-1 p-3 border rounded"
+									th:field="*{isPublic}">
+									<!-- public -->
+									<div class="col-3">
+										<label for="public">공개</label> <input type="radio"
+											name="isPublic" value="true" th:value="true" id="public">
+									</div>
+
+									<!-- not public -->
+									<div class="col-3">
+										<label for="notPublic">비공개</label> <input type="radio"
+											name="isPublic" value="false" th:value="false" id="woman">
+									</div>
+								</div>
+								<div class="form-text">* 무료 회원은 비공개가 불가능합니다.</div>
+								<br>
+
+								<!-- description -->
+								<textarea class="form-control" rows="5" cols="25"
+									name="description" th:field="*{description}"
+									placeholder="단어장 설명을 입력해주세요."></textarea>
+								<br>
+
+								<!-- sign up button -->
+								<div class="row justify-content-center">
+									<input class="col-4 btn btn-lg btn-outline-primary"
+										type="submit" value="단어장 추가" id="submitButton">
+								</div>
+								<br>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal -->
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+<script type="text/javascript" th:src="@{/js/autoLoading.js}"></script>
+<script th:inline="javascript">
+
+	document.getElementById("lan").addEventListener("change", showDic);
+
+	function showDic() {
+		/*<![CDATA[*/
+		let lan_1 = document.getElementById("lan");
+		let lan_2 = lan_1.options[lan_1.selectedIndex].value;
+
+		let selectDic = null;
+
+		if (lan_2 === 'KOR') {
+
+			// init
+			selectDic = document.getElementById("selectDic");
+			selectDic.options.length = 0;
+
+			let selectDicOption_1 = document.createElement("option");
+			selectDicOption_1.text = '네이버';
+			selectDicOption_1.value = /*[[${T(com.example.My.Dictonary.Entities.Enum.Dic).NAVER}]]*/;
+
+			selectDic.options.add(selectDicOption_1);
+
+		} else if (lan_2 === 'ENG') {
+
+			// init
+			selectDic = document.getElementById("selectDic");
+			selectDic.options.length = 0;
+
+			let selectDicOption_1 = document.createElement("option");
+			selectDicOption_1.text = '네이버';
+			selectDicOption_1.value = /*[[${T(com.example.My.Dictonary.Entities.Enum.Dic).NAVER}]]*/;
+			selectDic.options.add(selectDicOption_1);
+			let selectDicOption_2 = document.createElement("option");
+			selectDicOption_2.text = '롱맨';
+			selectDicOption_2.value = /*[[${T(com.example.My.Dictonary.Entities.Enum.Dic).LONGMAN}]]*/;
+			selectDic.options.add(selectDicOption_2);
+
+		} else if (lan_2 === 'JAP') {
+
+			// init
+			selectDic = document.getElementById("selectDic");
+			selectDic.options.length = 0;
+
+			let selectDicOption_1 = document.createElement("option");
+			selectDicOption_1.text = '네이버';
+			selectDicOption_1.value = /*[[${T(com.example.My.Dictonary.Entities.Enum.Dic).NAVER}]]*/;
+			selectDic.options.add(selectDicOption_1);
+			let selectDicOption_2 = document.createElement("option");
+			selectDicOption_2.text = 'Goo';
+			selectDicOption_2.value = /*[[${T(com.example.My.Dictonary.Entities.Enum.Dic).GOO}]]*/;
+			selectDic.options.add(selectDicOption_2);
+		} else if (lan_2 === 'SPA') {
+
+			// init
+			selectDic = document.getElementById("selectDic");
+			selectDic.options.length = 0;
+
+			let selectDicOption_1 = document.createElement("option");
+			selectDicOption_1.text = '네이버';
+			selectDicOption_1.value = /*[[${T(com.example.My.Dictonary.Entities.Enum.Dic).NAVER}]]*/;
+			selectDic.options.add(selectDicOption_1);
+		}
+	}
+	/*]]*/
+</script>
+
+</html>

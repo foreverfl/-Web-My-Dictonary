@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!-- my dictionary CSS -->
+<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+<title>My Dictionary: 단어장 리스트</title>
+</head>
+
+<body>
+	<div class="container-fluid p-0"
+		th:insert="~{/fragment/navbar :: navbar}"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"></div>
+		<div class="col-11" id="main">
+			<div class="d-flex align-self-center mt-5">
+				<table class="table text-center">
+					<thead>
+						<tr>
+							<th scope="col">단어장 이름 ▼</th>
+							<th scope="col">해당 사전 ▼</th>
+							<th scope="col">어휘수 ▼</th>
+							<th scope="col">작성자</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="dic, idx : ${session.all_dics}">
+							<tr>
+								<td class="align-middle" scope="col"><a
+									class="text-decoration-none link-dark" th:text="${dic.name}"
+									th:href="@{/dictionary/{dicWriter}/{dicId}(dicWriter=${dic.writer}, dicId=${dic.idAuto})}">단어장
+										이름</a></td>
+								<td class="align-middle" scope="col" th:text="${dic.dic}">해당
+									사전</td>
+								<td class="align-middle" scope="col"
+									th:text="${session.all_dics_cnt[idx.index]}">어휘 수</td>
+								<td scope="col" th:text="${dic.writer}">작성자</td>
+								<td class="subscribe" scope="col" style="width: 100px;">
+									<button class="btn btn-outline-secondary btn-sm">구독하기</button>
+								</td>
+							</tr>
+							<tr class="text-start">
+								<td colspan='5' th:text="${dic.description}">
+									<p>단어장 설명입니다.
+								</td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal -->
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+<script type="text/javascript" th:src="@{/js/autoLoading.js}"></script>
+</html>

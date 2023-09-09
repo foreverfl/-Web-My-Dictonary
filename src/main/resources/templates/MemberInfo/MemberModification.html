@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- Bootstrap CSS -->
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<!-- my dictionary CSS -->
+	<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+	<!-- font setting -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Hi+Melody&display=swap" rel="stylesheet">
+	<title>My Dictionary: 회원정보 수정</title>
+</head>
+
+<body>
+	<div class="container-fluid p-0" th:insert="~{/fragment/navbar :: navbar}" id="navbar"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"></div>
+		<div class="col-11" id="main">
+			<h2 class="text-center" style="font-family: 'Hi Melody', cursive; font-size: 60px">
+				<strong>회원정보 수정</strong>
+			</h2>
+			<br>
+			<div class="row justify-content-center text-center">
+				<div class="col-4 rounded border border-1 p-4">
+					<!-- photo -->
+					<div class="row justify-content-center mb-4">
+						<th:block th:if="${session.member_photo} eq null">
+							<img class="rounded-circle border border-1" th:src="@{/images/noun/Profile.png}" id="photo"
+								style="width: 400px; height: 400px;">
+						</th:block>
+						<th:block th:if="${session.member_photo} neq null">
+							<img class="rounded-circle" th:src="@{${session.member_photo}}" id="photo"
+								style="width: 400px; height: 400px;">
+						</th:block>
+						<div id="photo_check"></div>
+					</div>
+
+					<form class="mb-4" method="post" th:action="@{/memberModification/upload_photo}"
+						enctype="multipart/form-data">
+						<input type="file" name="file" id="upload_photo" style="display: none">
+						<button class="btn btn-outline-danger" type="button" id="btn_delete_photo"
+							style="width: 100px;">제거하기</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="btn btn-outline-primary" type="submit" id="btn_update_photo"
+							style="width: 100px;">변경하기</button>
+					</form>
+
+					<!-- ID -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" type="text" th:value="${session.member_id}" disabled>
+						</div>
+					</div>
+
+					<!-- password -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" id="pw" type="password" name="password" placeholder="비밀번호">
+						</div>
+						<div class="text-start" id="pw_check"></div>
+					</div>
+
+					<!-- checking password -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" id="pw_repeated" type="password" name="check_password"
+								placeholder="비밀번호 확인">
+
+						</div>
+						<div class="text-start" id="pw_repeated_check"></div>
+					</div>
+
+					<!-- nickname -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" type="text" placeholder="닉네임" th:value="${nickName}"
+								id="nickname">
+							<div id="nickname_check"></div>
+						</div>
+						<div class="col-5">
+							<form class="form-control border-0">
+								<input class="form-check-input" type="radio" name="nickname" value="공개"><label
+									class="form-check-label">&nbsp;공개&nbsp;&nbsp;&nbsp;</label>
+								<input class="form-check-input" type="radio" name="nickname" value="비공개"><label
+									class="form-check-label">&nbsp;비공개</label>
+							</form>
+						</div>
+					</div>
+
+					<!-- email -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" type="text" th:value="${session.member_email}" disabled>
+						</div>
+						<div class="col-5">
+							<form class="form-control border-0">
+								<input class="form-check-input" type="radio" name="email" value="공개"><label
+									class="form-check-label">&nbsp;공개&nbsp;&nbsp;&nbsp;</label>
+								<input class="form-check-input" type="radio" name="email" value="비공개"><label
+									class="form-check-label">&nbsp;비공개</label>
+							</form>
+						</div>
+					</div>
+
+					<!-- level -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" type="text" th:value="'레벨: ' + ${level}" disabled>
+						</div>
+						<div class="col-5">
+							<form class="form-control border-0">
+								<input class="form-check-input" type="radio" name="email" value="공개"><label
+									class="form-check-label">&nbsp;공개&nbsp;&nbsp;&nbsp;</label>
+								<input class="form-check-input" type="radio" name="email" value="비공개"><label
+									class="form-check-label">&nbsp;비공개</label>
+							</form>
+						</div>
+					</div>
+
+					<!-- level bar -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<div class="progress">
+								<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+									id="exp_bar"></div>
+							</div>
+						</div>
+					</div>
+
+					<!-- words remembered -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" type="text" th:value="'암기한 단어'" disabled> <input
+								class="form-control" type="text" th:value="'&nbsp;&nbsp;&nbsp;영어: '" disabled> <input
+								class="form-control" type="text" th:value="'&nbsp;&nbsp;&nbsp;일본어: '" disabled> <input
+								class="form-control" type="text" th:value="'&nbsp;&nbsp;&nbsp;한국어: '" disabled> <input
+								class="form-control" type="text" th:value="'&nbsp;&nbsp;&nbsp;스페인어: '" disabled>
+						</div>
+					</div>
+
+					<!-- post -->
+					<div class="row justify-content-between mb-2">
+						<div class="col-7">
+							<input class="form-control" type="text" th:value="'게시물: '" disabled>
+						</div>
+						<div class="col-5">
+							<form class="form-control border-0">
+								<input class="form-check-input" type="radio" name="post" value="공개"><label
+									class="form-check-label">&nbsp;공개&nbsp;&nbsp;&nbsp;</label>
+								<input class="form-check-input" type="radio" name="post" value="비공개"><label
+									class="form-check-label">&nbsp;비공개</label>
+							</form>
+						</div>
+					</div>
+
+					<!-- comment -->
+					<div class="row justify-content-between mb-4">
+						<div class="col-7">
+							<input class="form-control" type="text" th:value="'댓글: '" disabled>
+						</div>
+						<div class="col-5">
+							<form class="form-control border-0">
+								<input class="form-check-input" type="radio" name="comment" value="공개"><label
+									class="form-check-label">&nbsp;공개&nbsp;&nbsp;&nbsp;&nbsp;</label><input
+									class="form-check-input" type="radio" name="comment" value="비공개"><label
+									class="form-check-label">&nbsp;비공개</label>
+							</form>
+						</div>
+					</div>
+
+					<!-- buttons -->
+					<div class="row justify-content-evenly">
+						<!-- button for withdrawal -->
+						<input class="col-4 btn btn-lg btn-danger" type="submit" value="탈퇴하기">
+
+						<!-- button for update -->
+						<input class="col-4 btn btn-lg btn-outline-primary" type="submit" value="수정하기">
+					</div>
+					<br>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal -->
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+<script type="text/javascript" th:src="@{/js/autoLoading.js}"></script>
+<script th:inline="javascript">
+	/* <![CDATA[ */
+	updatePhoto();
+	function updatePhoto() {
+
+		const photo = document.querySelector('#photo');
+
+		photo.addEventListener('mouseover', function () {
+			this.style.cursor = 'pointer';
+		})
+
+		photo.addEventListener('click', function () {
+			const photo = document.querySelector('#upload_photo');
+			photo.click();
+
+		})
+
+		const uploadPhoto = document.querySelector('#upload_photo');
+
+		uploadPhoto.addEventListener('change', function () {
+			let photoCheck = document.querySelector('#photo_check');
+			console.log(photoCheck);
+			photoCheck.innerHTML = '변경하기를 눌러주세요.'
+		})
+
+	}
+
+	deletePhoto();
+	function deletePhoto() {
+		document.querySelector('#btn_delete_photo').addEventListener('click', function () {
+			location.href = 'http://localhost:8080/memberModification/delete_photo';
+		})
+	}
+
+	checkPassword();
+	function checkPassword() {
+		const pw = document.querySelector('#pw');
+		const pwCheck = document.querySelector('#pw_check');
+
+		pw.addEventListener('input', function () {
+			const regExp_pw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+			if (regExp_pw.test(pw.value)) {
+				pwCheck.innerHTML = "가능합니다.";
+			} else {
+				pwCheck.innerHTML = "문자/숫자/특수문자를 포함하고 8자 이상이어야 합니다.";
+			}
+		})
+
+	}
+
+	checkPasswordRepeated();
+	function checkPasswordRepeated() {
+		const pw = document.querySelector('#pw');
+		const pwRepeated = document.querySelector('#pw_repeated');
+		const pwRepeatedCheck = document.querySelector('#pw_repeated_check');
+
+		pwRepeated.addEventListener('input', function () {
+			if (pwRepeated.value === pw.value) {
+				pwRepeatedCheck.innerHTML = "가능합니다.";
+			} else {
+				pwRepeatedCheck.innerHTML = "비밀번호가 일치하지 않습니다.";
+			}
+		})
+
+	}
+
+	controlExpBar();
+	function controlExpBar() {
+		let expBar = document.querySelector('#exp_bar');
+		expBar.style.width = /*[[${exp_ratio} + '%']]*/;
+	}
+/* ]] */
+</script>
+
+</html>

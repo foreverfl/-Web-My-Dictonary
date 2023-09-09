@@ -1,0 +1,67 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- Bootstrap CSS -->
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<!-- my dictionary CSS -->
+	<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+	<title>My Dictionary: 내가 외운 단어</title>
+</head>
+
+<body>
+
+	<div class="container-fluid p-0" th:insert="~{/fragment/navbar :: navbar}"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"></div>
+		<div class="col-11" id="main">
+			<div>
+				<!-- language -->
+				<span class="fs-3 fw-bold">영어</span>
+				<!-- total -->
+				<span class="fs-5 fw-bold">/ 500개</span>
+			</div>
+
+			<!-- words -->
+			<div class="row" id="words">
+				<div class="col">
+					<table class="table table-hover text-center">
+						<tbody>
+							<tr th:each="word : ${session.words_1}">
+								<td th:text="${word.word}">단어</td>
+								<td th:text="${word.count} + '회'">횟수</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="col">
+					<table class="table table-hover text-center">
+						<tbody>
+							<tr th:each="word : ${session.words_2}">
+								<td th:text="${word.word}">단어</td>
+								<td th:text="${word.count} + '회'">횟수</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="col">
+					<table class="table table-hover text-center">
+						<tbody>
+							<tr th:each="word : ${session.words_3}">
+								<td th:text="${word.word}">단어</td>
+								<td th:text="${word.count} + '회'">횟수</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+</html>

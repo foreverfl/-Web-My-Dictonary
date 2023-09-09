@@ -1,0 +1,125 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!-- my dictionary CSS -->
+<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+<title>My Dictionary: 채점 결과</title>
+</head>
+
+<body>
+
+	<div class="container-fluid p-0"
+		th:insert="~{/fragment/navbar :: navbar}"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"></div>
+		<div class="col-11" id="main">
+			<!-- dictionary info -->
+			<div>
+				<!-- dictionary name -->
+				<span class="fs-3 fw-bold" th:text="${session.dic_name}"></span>
+				<!-- dictionary writer -->
+				<span class="fs-5 fw-bold"
+					th:text="'/ ' + ${session.dic_writer}"></span>
+			</div>
+
+			<!-- dictionary type -->
+			<div class="fs-3">
+				<span th:text=${session.dic_type} id="dic_type"></span> <span
+					th:text=${session.dic_lan} id="dic_lan"></span>
+			</div>
+
+			<!-- test result summary -->
+			<div class="text-end fw-bold my-3">
+				총 단어 개수: <span th:text=${session.test_all}></span><br>
+				테스트 제출: <span th:text=${session.test_passed}></span><br>
+				테스트 통과: <span th:text=${session.test_submitted}></span>
+			</div>
+
+			<!-- title -->
+			<div>
+				<p class="fs-3 fw-bold">통과하지 못한 단어</p>
+			</div>
+
+			<!-- dictionary -->
+			<div class="vertical-center">
+				<table class="table table-striped text-center">
+					<thead>
+						<tr>
+							<th>어휘</th>
+							<th>의미</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="word : ${session.words_not_passed}">
+							<!-- vocabulary and pronunciation -->
+							<td class="align-middle"
+								style="max-width: 300px; word-break: break-all;">
+								<!-- vocabulary --> <span class="fw-bold fs-2"
+								th:text="${word.word}">어휘</span> <br> <!-- pronunciation -->
+								<span class="fs-4" th:text="${word.pronoun}"
+								style="white-space: pre-wrap;">발음기호</span>
+							</td>
+							<td class="align-middle text-start" th:utext="${word.meaning}"
+								style="white-space: pre-wrap;">의미</td>
+							<td style="display: none;" class="link_delete"
+								th:text="${word.idAuto}"></td>
+							<td style="display: none;" class="test_count"
+								th:text="${word.testCount}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal -->
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+<script type="text/javascript" th:src="@{/js/autoLoading.js}"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	// kanji link
+	const kanji_regExp = new RegExp(/[一-龥]/);
+
+	let kanjis_1 = document.querySelectorAll('span.fw-bold.fs-2');
+	for (let i = 0; i < kanjis_1.length; i++) {
+		let kanjis_2 = kanjis_1[i].innerText;
+		let kanjis_3 = kanjis_2.split('');
+
+		let kanji = '';
+		for (let j = 0; j < kanjis_3.length; j++) {
+
+			if (kanji_regExp.test(kanjis_3[j])) {
+				kanjis_3[j] = '<span><a class="text-decoration-none link-dark" target=\"_blank\" href="https://hanja.dict.naver.com/#/search?query='
+						+ kanjis_3[j] + '">' + kanjis_3[j] + '</a></span>';
+				kanji += kanjis_3[j];
+			} else {
+				kanji += kanjis_3[j];
+			}
+		}
+		kanjis_1[i].innerHTML = kanji;
+	}
+
+	// changing bgcolor
+	const words = document
+			.querySelectorAll('span>a.text-decoration-none.link-dark');
+
+	for (let i = 0; i < words.length; i++) {
+		words[i].addEventListener('mouseover', function() {
+			words[i].style.backgroundColor = 'yellow';
+		});
+
+		words[i].addEventListener('mouseleave', function() {
+			words[i].style.backgroundColor = '';
+		});
+	}
+
+	/*]]>*/
+</script>
+
+</html>

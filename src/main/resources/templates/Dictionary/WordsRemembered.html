@@ -1,0 +1,192 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!-- my dictionary CSS -->
+<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+<title>My Dictionary: 내가 외운 단어</title>
+</head>
+
+<body>
+
+	<div class="container-fluid p-0"
+		th:insert="~{/fragment/navbar :: navbar}"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"></div>
+		<div class="col-11" id="main">
+			<div>
+				<!-- language -->
+				<span class="fs-3 fw-bold" th:text="${session.language}">언어</span>
+				<!-- total -->
+				<span class="fs-5 fw-bold" th:text="'/ ' + ${session.language_cnt} + '개'">개수</span>
+			</div>
+
+			<br>
+			<button th:href="@{/words_remembered/add_dummy}"
+				class="btn btn-lg btn-outline-primary" type="button" id="tmp_1">더미
+				일괄 추가</button>
+			<button th:href="@{/words_remembered/delete_dummy}"
+				class="btn btn-lg btn-outline-primary" type="button" id="tmp_2">더미
+				일괄 제거</button>
+
+			<div class="text-end">
+				<!-- button for sorting -->
+				<select class="form-select" id="btn_sort"
+					style="width: 120px; display: inline-block">
+					<option th:each="option : ${options}" th:value="${option.value}"
+						th:text="${option.text}">정렬</option>
+				</select> <br> <br>
+			</div>
+
+			<!-- words -->
+			<div id="start"></div>
+			<div id="end"></div>			
+		</div>
+	</div>
+
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+
+	// sorting 
+	// selection
+	// const btnSort = document.querySelector('#btn_sort');
+	// btnSort.addEventListener('change', function () {
+	// 	if (btnSort.options[btnSort.selectedIndex].value === 'random') {
+	// 		localStorage.setItem('sort', 'random');
+	// 		sortWords();
+	// 	} else if (btnSort.options[btnSort.selectedIndex].value === 'time') {
+	// 		localStorage.setItem('sort', 'time');
+	// 		sortWords();
+	// 	} else if (btnSort.options[btnSort.selectedIndex].value === 'character') {
+	// 		localStorage.setItem('sort', 'character');
+	// 		sortWords();
+	// 	}
+	// 	window.location.reload();
+	// 	console.log(localStorage.getItem('sort'));
+	// });
+	// sortWords();
+	// function sortWords() {
+	// 	const sort = localStorage.getItem('sort');
+	// 	for (let i = 0; i < btnSort.options.length; i++) {
+	// 		option = btnSort.options[i];
+	// 		if (option.value === sort) {
+	// 			option.setAttribute('selected', true);
+	// 		} else {
+	// 			option.removeAttribute('selected');
+	// 		}
+	// 	}
+	// 	const dicWriter = /*[[${session.session_dic_writer}]]*/;
+	// 	const dicId = /*[[${session.session_dic_id}]]*/;
+	// 	const url_wayToSort = 'http://localhost:8080/dictionary/' + dicWriter + '/' + dicId + '/' + sort;
+	// 	fetch(url_wayToSort, {
+	// 		method: "PATCH"
+	// 	})
+	// 		.then((response) => console.log(response))
+	// 		.catch((error) => console.log(error));
+	// }
+
+	// kanji link
+	const kanji_regExp = new RegExp(/[一-龥]/);
+
+	let kanjis_1 = document.querySelectorAll('span.fw-bold.fs-2');
+	for (let i = 0; i < kanjis_1.length; i++) {
+		let kanjis_2 = kanjis_1[i].innerText;
+		let kanjis_3 = kanjis_2.split('');
+
+		let kanji = '';
+		for (let j = 0; j < kanjis_3.length; j++) {
+
+			if (kanji_regExp.test(kanjis_3[j])) {
+				kanjis_3[j] = '<span><a class="text-decoration-none link-dark" target=\"_blank\" href="https://hanja.dict.naver.com/#/search?query='
+					+ kanjis_3[j] + '">' + kanjis_3[j] + '</a></span>';
+				kanji += kanjis_3[j];
+			} else {
+				kanji += kanjis_3[j];
+			}
+		}
+		kanjis_1[i].innerHTML = kanji;
+	}
+
+	// changing bgcolor
+	const words = document
+		.querySelectorAll('span>a.text-decoration-none.link-dark');
+
+	for (let i = 0; i < words.length; i++) {
+		words[i].addEventListener('mouseover', function () {
+			words[i].style.backgroundColor = 'yellow';
+		});
+
+		words[i].addEventListener('mouseleave', function () {
+			words[i].style.backgroundColor = '';
+		});
+	}
+
+	// dummy data for test
+	document.querySelector('#tmp_1').addEventListener('click', function () {
+		location.href = 'http://localhost:8080/words_remembered/add_dummy'
+	});
+
+	document.querySelector('#tmp_2').addEventListener('click', function () {
+		location.href = 'http://localhost:8080/words_remembered/delete_dummy'
+	});
+
+	infiniteScroll();
+	// infinite scroll
+	function infiniteScroll() {
+		const start = document.querySelector('#start');
+		let end = document.querySelector('#end');
+		let page = 1;
+
+		const io = new IntersectionObserver((entry, observer) => {
+
+			const ioTarget = entry[0].target;
+
+			if (entry[0].isIntersecting) {
+				console.log('현재 보이는 타켓', ioTarget);
+
+				io.unobserve(end);
+
+				url_now = window.location.href;
+				url_now_arr = url_now.split('/');
+
+				const memberId = url_now_arr[url_now_arr.length - 3];
+				const language = url_now_arr[url_now_arr.length - 2];
+				
+				let url_words = 'http://localhost:8080/words_remembered/' + memberId + '/' + language + '/' + page;
+
+				fetch(url_words)
+					.then(response => response.text())
+					.then(text => {
+						const parser = new DOMParser();
+						const doc = parser.parseFromString(text, "text/html");
+
+						// next part
+						const nextTable = doc.querySelector('#words');
+						
+						end = start.appendChild(nextTable);
+						page++;
+						io.observe(end);
+					})
+					.catch(error => console.log(error));
+
+				
+			}
+
+		}, {
+			threshold: 0.5
+		});
+
+		io.observe(start);
+	}
+
+
+	/*]]>*/
+</script>
+
+</html>

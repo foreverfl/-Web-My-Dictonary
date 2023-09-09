@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- Bootstrap CSS -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!-- my dictionary CSS -->
+<link th:href="@{/css/myDictionary.css}" rel="stylesheet">
+<!-- font setting -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Jua&family=The+Nautigal:wght@700&display=swap"
+	rel="stylesheet">
+<title>My Dictionary: 프로필</title>
+</head>
+
+<body>
+	<div class="container-fluid p-0"
+		th:insert="~{/fragment/navbar :: navbar}" id="navbar"></div>
+	<div class="container-fluid row ps-0 pe-0">
+		<div class="col pe-0" th:insert="~{/fragment/sidebar :: sidebar}"
+			id="sidebar"></div>
+		<div class="col-11" id="main">
+			<div class="container h-75">
+				<div class="row h-100 justify-content-center ">
+					<form class="align-self-center border rounded col-6"
+						th:action="@{/sign_up}" th:method="POST" th:object="${memberDTO}">
+
+						<br>
+						<h2 class="text-center">프로필</h2>
+						<br>
+						<div class="row justify-content-center">
+							<div class="col-8">
+								<div class="d-flex flex-row justify-content-between">
+									<div class="col-8">
+										<!-- inputting ID -->
+										<input class="form-control" id="id" type="text" name="id"
+											th:field="*{id}" placeholder="아이디">
+									</div>
+									<div class="col-auto"></div>
+
+									<div class="col-3 text-end">
+										<!-- button to check duplication -->
+										<input class="btn btn-sm btn-secondary" type="button"
+											value="중복체크">
+									</div>
+								</div>
+								<br>
+								<!-- inputting password -->
+								<input class="form-control" id="pw" type="password"
+									name="password" th:field="*{pw}" placeholder="비밀번호"> <br>
+
+								<!-- checking password -->
+								<input class="form-control" id="check_pw" type="password"
+									name="check_password" placeholder="비밀번호 확인"> <br>
+
+								<!-- nickname -->
+								<input class="form-control" id="nickname" type="text"
+									name="nick_name" th:field="*{nickname}" placeholder="닉네임">
+								<br>
+
+								<div class="d-flex flex-row justify-content-between">
+									<div class="col-8">
+										<!-- mail -->
+										<input class="form-control" id="email" type="text" name="mail"
+											th:field="*{email}" placeholder="이메일"><br>
+									</div>
+									<div class="col-auto"></div>
+
+									<div class="col-3 text-end">
+										<!-- button to certify-->
+										<input class="btn btn-sm btn-secondary" type="button"
+											value="인증하기" onclick="href=location.href='/mail'">
+									</div>
+								</div>
+								<br>
+
+								<!-- sign up button -->
+								<div class="row justify-content-center">
+									<input class="col-4 btn btn-lg btn-outline-primary"
+										type="submit" value="수정하기">
+								</div>
+								<br>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal -->
+	<div th:insert="~{/fragment/modal :: modal}"></div>
+</body>
+<script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/convertTheme.js}"></script>
+<script type="text/javascript" th:src="@{/js/autoLoading.js}"></script>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>My Dictionary</title>
+</head>
+
+<body>
+	<div th:fragment="sidebar"
+		class="d-flex flex-column bg-light min-vh-100" id="sidebar">
+		<ul class="nav nav-pills flex-column">
+			<li><a th:href="@{/dictionaryMaking}" class="nav-link link-dark">
+					<img class="noun" th:src="@{/images/noun/Addition.png}">&nbsp;&nbsp;<strong>단어장
+						추가하기</strong>
+			</a></li>
+		</ul>
+		<hr>
+		<!-- 내 단어장 -->
+		<ul class="nav nav-pills flex-column" id="dic_mine">
+			<li><a th:href="@{/dictionary_list/mine}"
+				class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/noun/DictionaryMine.png}">&nbsp;&nbsp;<strong>내
+						단어장</strong> </a></li>
+			<th:block th:each="dic : ${session.dics_mine}">
+				<li><a
+					th:href="@{/dictionary/{dicWriter}/{dicId}(dicWriter=${dic.Writer}, dicId=${dic.IdAuto})}"
+					th:text="'&nbsp;&nbsp;' + ${dic.name}" class="nav-link link-dark">단어장</a></li>
+			</th:block>
+		</ul>
+		<hr>
+
+		<!-- 구독한 단어장 -->
+		<ul class="nav nav-pills flex-column" id="dic_subscribed">
+			<li><a href="#" class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/noun/DictionarySubscribed.png}">&nbsp;&nbsp;<strong>구독한
+						단어장</strong> </a></li>
+		</ul>
+		<ul class="nav nav-pills flex-column">
+			<th:block th:each="dic : ${session.dics_subscribed}">
+				<li><a
+					th:href="@{/dictionary/{dicWriter}/{dicId}(dicWriter=${dic.Writer}, dicId=${dic.IdAuto})}"
+					th:text="'&nbsp;&nbsp;' + ${dic.name}" class="nav-link link-dark">단어장</a></li>
+			</th:block>
+		</ul>
+		<hr>
+
+		<!-- 내가 외운 단어 -->
+		<ul class="nav nav-pills flex-column">
+			<li><a href="#" class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/noun/WordsRemembered.png}">&nbsp;&nbsp;<strong>내가
+						외운 단어</strong> </a></li>
+			<li><a
+				th:href="@{/words_remembered/{memberId}/{language}(memberId=${session.member_idAuto}, language='english')}"
+				class="nav-link link-dark">&nbsp;&nbsp;영어</a></li>
+			<li><a
+				th:href="@{/words_remembered/{memberId}/{language}(memberId=${session.member_idAuto}, language='japanese')}"
+				class="nav-link link-dark">&nbsp;&nbsp;일본어</a></li>
+			<li><a
+				th:href="@{/words_remembered/{memberId}/{language}(memberId=${session.member_idAuto}, language='korean')}"
+				class="nav-link link-dark">&nbsp;&nbsp;한국어</a></li>
+			<li><a
+				th:href="@{/words_remembered/{memberId}/{language}(memberId=${session.member_idAuto}, language='spanish')}"
+				class="nav-link link-dark">&nbsp;&nbsp;스페인어</a></li>
+		</ul>
+		<hr>
+		<ul class="nav nav-pills flex-column">
+			<li><a href="#" class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/noun/Study.png}">&nbsp;&nbsp;<strong>학습
+						자료</strong> </a></li>
+			<li><a href="#" class="nav-link link-dark">&nbsp;&nbsp;공부 방법</a></li>
+			<li><a href="#" class="nav-link link-dark">&nbsp;&nbsp;발음</a></li>
+			<li><a href="#" class="nav-link link-dark">&nbsp;&nbsp;문법</a></li>
+		</ul>
+		<hr>
+
+		<!-- 기타 -->
+		<ul class="nav nav-pills flex-column">
+			<li><a href="#" class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/SNS/loginKakao.png}">&nbsp;&nbsp;<strong>친구
+						추가</strong></a></li>
+			<li><a href="#" class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/noun/Notice.png}">&nbsp;&nbsp;<strong>공지사항</strong></a></li>
+			<li><a href="#" class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/noun/HowToUse.png}">&nbsp;&nbsp;<strong>이용방법</strong></a></li>
+			<li><a href="#" class="nav-link link-dark"
+				data-bs-toggle="modal" data-bs-target="#exampleModal"><img
+					class="noun" th:src="@{/images/noun/SendingOpinion.png}">&nbsp;&nbsp;<strong>의견
+						보내기</strong></a></li>
+			<li><a th:href="@{/terms_personal_information}"
+				class="nav-link link-dark"><img class="noun"
+					th:src="@{/images/noun/Terms.png}">&nbsp;&nbsp;<strong>개인정보처리방침</strong></a></li>
+			<li><a th:href="@{/terms_using_site}" class="nav-link link-dark">
+					<img class="noun" th:src="@{/images/noun/Terms.png}">&nbsp;&nbsp;<strong>약관</strong>
+			</a></li>
+		</ul>
+		<br> <br> <br>
+	</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+package com.example.My.Dictonary.Repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.My.Dictonary.Entities.MemberDictionary;
+
+@Repository
+public interface MemberDictionaryRepository extends JpaRepository<MemberDictionary, Long> {
+		
+}
